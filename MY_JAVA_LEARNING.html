@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Complete Java Quiz - Grade 8-10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: rainbow 3s infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff6b6b; }
+            25% { color: #4ecdc4; }
+            50% { color: #45b7d1; }
+            75% { color: #f9ca24; }
+            100% { color: #ff6b6b; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 150px;
+        }
+
+        .timer.warning {
+            animation: pulse 0.5s infinite;
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            border-radius: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .score-item {
+            text-align: center;
+            color: white;
+            min-width: 100px;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .difficulty-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .level-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .level-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .level-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.05);
+        }
+
+        .question-area {
+            text-align: left;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            min-height: 150px;
+            border: 3px solid #e0e0e0;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: bold;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 10px;
+            display: block;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: 4px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .option-btn.correct-option:hover {
+            transform: scale(1.05);
+            border-color: #11998e;
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+            color: white !important;
+            border-color: #11998e !important;
+            animation: celebrate 0.6s ease;
+            transform: scale(1) !important;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+            border-color: #eb3349;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(5deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(3deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px) rotate(-5deg); }
+            50% { transform: translateX(15px) rotate(5deg); }
+            75% { transform: translateX(-10px) rotate(-3deg); }
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            min-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .feedback.correct {
+            color: #38ef7d;
+            animation: bounceIn 0.5s ease;
+        }
+
+        .feedback.wrong {
+            color: #f45c43;
+            animation: shakeText 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes shakeText {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .next-btn {
+            display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .next-btn.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .emoji-rain {
+            position: fixed;
+            font-size: 2.5em;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .sound-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .question { font-size: 1.1em; }
+            .option-btn { font-size: 1.1em; padding: 15px; min-height: 80px; }
+            .timer { font-size: 1.5em; }
+            .level-btn { font-size: 0.85em; padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Sound ON</button>
+        
+        <h1>☕ Complete Java Quiz</h1>
+        <p class="subtitle">Master Java Programming - Grades 8-10</p>
+
+        <div class="timer-container">
+            <div class="timer" id="timer">⏱️ 60</div>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Streak 🔥</div>
+                <div class="score-value" id="streak">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct ✅</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Wrong ❌</div>
+                <div class="score-value" id="wrong">0</div>
+            </div>
+        </div>
+
+        <div class="difficulty-selector">
+            <div class="difficulty-label">📚 Choose Level:</div>
+            <button class="difficulty-btn" onclick="selectDifficulty('easy')">🟢 Grade 8 (Beginner)</button>
+            <button class="difficulty-btn active" onclick="selectDifficulty('medium')">🟡 Grade 9 (Intermediate)</button>
+            <button class="difficulty-btn" onclick="selectDifficulty('hard')">🔴 Grade 10 (Advanced)</button>
+        </div>
+
+        <div class="level-selector">
+            <button class="level-btn active" onclick="selectTopic('variables')">📦 Variables</button>
+            <button class="level-btn" onclick="selectTopic('datatypes')">🔢 Data Types</button>
+            <button class="level-btn" onclick="selectTopic('operators')">➕ Operators</button>
+            <button class="level-btn" onclick="selectTopic('string')">📝 Strings</button>
+            <button class="level-btn" onclick="selectTopic('math')">🧮 Math</button>
+            <button class="level-btn" onclick="selectTopic('boolean')">✅ Boolean</button>
+            <button class="level-btn" onclick="selectTopic('ifelse')">🔀 If-Else</button>
+            <button class="level-btn" onclick="selectTopic('switch')">🔄 Switch</button>
+            <button class="level-btn" onclick="selectTopic('whileloop')">🔁 While Loop</button>
+            <button class="level-btn" onclick="selectTopic('forloop')">🔂 For Loop</button>
+            <button class="level-btn" onclick="selectTopic('arrays')">📊 Arrays</button>
+            <button class="level-btn" onclick="selectTopic('methods')">⚙️ Methods</button>
+            <button class="level-btn" onclick="selectTopic('parameters')">📥 Parameters</button>
+            <button class="level-btn" onclick="selectTopic('overloading')">🔄 Overloading</button>
+            <button class="level-btn" onclick="selectTopic('classes')">🎯 Classes</button>
+            <button class="level-btn" onclick="selectTopic('objects')">📦 Objects</button>
+            <button class="level-btn" onclick="selectTopic('constructor')">🏗️ Constructor</button>
+            <button class="level-btn" onclick="selectTopic('modifiers')">🔒 Modifiers</button>
+            <button class="level-btn" onclick="selectTopic('encapsulation')">🛡️ Encapsulation</button>
+            <button class="level-btn" onclick="selectTopic('inheritance')">👨‍👦 Inheritance</button>
+            <button class="level-btn" onclick="selectTopic('polymorphism')">🎭 Polymorphism</button>
+            <button class="level-btn" onclick="selectTopic('super')">⬆️ Super</button>
+        </div>
+
+        <div class="question-area">
+            <div class="question" id="question">What is a variable?</div>
+        </div>
+
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <div class="feedback" id="feedback"></div>
+        
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question ➡️</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let streak = 0;
+        let currentTopic = 'variables';
+        let currentDifficulty = 'medium';
+        let correctAnswer = '';
+        let answered = false;
+        let timerInterval;
+        let timeLeft = 60;
+        let soundEnabled = true;
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(frequency, duration, type = 'sine') {
+            if (!soundEnabled) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCorrectSound() {
+            playSound(523.25, 0.1);
+            setTimeout(() => playSound(659.25, 0.1), 100);
+            setTimeout(() => playSound(783.99, 0.2), 200);
+        }
+
+        function playWrongSound() {
+            playSound(200, 0.3, 'sawtooth');
+        }
+
+        function playClickSound() {
+            playSound(400, 0.05);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            playClickSound();
+        }
+
+        function selectDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            playClickSound();
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            nextQuestion();
+        }
+
+        function selectTopic(topic) {
+            currentTopic = topic;
+            playClickSound();
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            nextQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = currentDifficulty === 'easy' ? 90 : currentDifficulty === 'medium' ? 60 : 45;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').classList.add('warning');
+                    if (timeLeft > 0 && timeLeft <= 5) playSound(300, 0.1);
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = `⏱️ ${timeLeft}`;
+        }
+
+        function timeUp() {
+            if (answered) return;
+            answered = true;
+            document.getElementById('feedback').textContent = '⏰ Time\'s Up!';
+            document.getElementById('feedback').className = 'feedback wrong';
+            wrongCount++;
+            streak = 0;
+            document.getElementById('wrong').textContent = wrongCount;
+            document.getElementById('streak').textContent = streak;
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.onmousemove = null;
+                btn.style.transform = '';
+                if (btn.textContent === correctAnswer) btn.classList.add('correct');
+            });
+            
+            playWrongSound();
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        const questions = {
+            variables: {
+                easy: [
+                    { q: "What is a variable?", options: ["Container for data", "Function", "Class", "Method"], answer: "Container for data" },
+                    { q: "Variable name can start with:", options: ["Letter or _", "Number", "Special char", "Space"], answer: "Letter or _" },
+                    { q: "Which is a valid variable name?", options: ["myAge", "my-age", "123age", "my age"], answer: "myAge" },
+                    { q: "int age = 25; Here 'age' is:", options: ["Variable", "Data type", "Value", "Keyword"], answer: "Variable" },
+                    { q: "Variables must be ___ before use", options: ["Declared", "Deleted", "Hidden", "Copied"], answer: "Declared" }
+                ],
+                medium: [
+                    { q: "final variable means:", options: ["Cannot change value", "Can change", "Private", "Protected"], answer: "Cannot change value" },
+                    { q: "Variable scope is:", options: ["Where it's accessible", "Its type", "Its value", "Its name"], answer: "Where it's accessible" },
+                    { q: "Local variable declared in:", options: ["Method", "Class level", "Package", "Anywhere"], answer: "Method" },
+                    { q: "Instance variable belongs to:", options: ["Object", "Class", "Method", "Package"], answer: "Object" },
+                    { q: "static variable is shared by:", options: ["All objects", "One object", "No objects", "Methods only"], answer: "All objects" }
+                ],
+                hard: [
+                    { q: "What is variable shadowing?", options: ["Local hides instance", "Global variable", "Copy variable", "Delete variable"], answer: "Local hides instance" },
+                    { q: "Transient variable:", options: ["Not serialized", "Always serialized", "Cannot create", "Must be final"], answer: "Not serialized" },
+                    { q: "Volatile variable:", options: ["Thread-safe read", "Faster", "Slower", "Cannot change"], answer: "Thread-safe read" },
+                    { q: "Can we reassign final reference?", options: ["No", "Yes", "Sometimes", "Only null"], answer: "No" },
+                    { q: "Naming convention for constants:", options: ["ALL_CAPS", "camelCase", "lowercase", "PascalCase"], answer: "ALL_CAPS" }
+                ]
+            },
+            datatypes: {
+                easy: [
+                    { q: "int stores:", options: ["Whole numbers", "Decimals", "Text", "True/False"], answer: "Whole numbers" },
+                    { q: "double stores:", options: ["Decimal numbers", "Integers", "Characters", "Boolean"], answer: "Decimal numbers" },
+                    { q: "char stores:", options: ["Single character", "String", "Number", "Boolean"], answer: "Single character" },
+                    { q: "Size of int:", options: ["4 bytes", "2 bytes", "8 bytes", "1 byte"], answer: "4 bytes" },
+                    { q: "Which is NOT primitive?", options: ["String", "int", "boolean", "char"], answer: "String" }
+                ],
+                medium: [
+                    { q: "byte range:", options: ["-128 to 127", "0 to 255", "-256 to 255", "0 to 128"], answer: "-128 to 127" },
+                    { q: "Wrapper class for int:", options: ["Integer", "Int", "int", "INTEGER"], answer: "Integer" },
+                    { q: "Type casting: (int) 3.7 gives:", options: ["3", "4", "3.7", "Error"], answer: "3" },
+                    { q: "Widening conversion:", options: ["int to long", "long to int", "double to int", "All"], answer: "int to long" },
+                    { q: "Default value of boolean:", options: ["false", "true", "0", "null"], answer: "false" }
+                ],
+                hard: [
+                    { q: "Size of long:", options: ["8 bytes", "4 bytes", "16 bytes", "2 bytes"], answer: "8 bytes" },
+                    { q: "float vs double precision:", options: ["double more precise", "float more precise", "Same", "Depends"], answer: "double more precise" },
+                    { q: "Character encoding in Java:", options: ["Unicode", "ASCII", "UTF-8", "Binary"], answer: "Unicode" },
+                    { q: "Integer.MAX_VALUE + 1 =", options: ["Integer.MIN_VALUE", "Error", "MAX_VALUE", "0"], answer: "Integer.MIN_VALUE" },
+                    { q: "Auto-boxing:", options: ["Primitive to Wrapper", "Wrapper to Primitive", "Type casting", "None"], answer: "Primitive to Wrapper" }
+                ]
+            },
+            operators: {
+                easy: [
+                    { q: "5 + 3 = ?", options: ["8", "53", "2", "15"], answer: "8" },
+                    { q: "10 - 4 = ?", options: ["6", "14", "10", "4"], answer: "6" },
+                    { q: "7 * 2 = ?", options: ["14", "9", "5", "72"], answer: "14" },
+                    { q: "10 / 2 = ?", options: ["5", "10", "2", "20"], answer: "5" },
+                    { q: "15 % 4 = ?", options: ["3", "4", "15", "0"], answer: "3" }
+                ],
+                medium: [
+                    { q: "5 / 2 (int division) = ?", options: ["2", "2.5", "3", "0"], answer: "2" },
+                    { q: "i++ means:", options: ["Post-increment", "Pre-increment", "Decrement", "Nothing"], answer: "Post-increment" },
+                    { q: "++i means:", options: ["Pre-increment", "Post-increment", "Decrement", "Nothing"], answer: "Pre-increment" },
+                    { q: "true && false = ?", options: ["false", "true", "Error", "0"], answer: "false" },
+                    { q: "true || false = ?", options: ["true", "false", "Error", "1"], answer: "true" }
+                ],
+                hard: [
+                    { q: "5 << 1 (left shift) = ?", options: ["10", "5", "2", "20"], answer: "10" },
+                    { q: "20 >> 2 (right shift) = ?", options: ["5", "10", "20", "2"], answer: "5" },
+                    { q: "Ternary operator: 5>3 ? 10 : 20", options: ["10", "20", "5", "3"], answer: "10" },
+                    { q: "Operator precedence: a+b*c", options: ["* before +", "+ before *", "Left to right", "Right to left"], answer: "* before +" },
+                    { q: "Short-circuit: && and ||", options: ["Stops if known", "Evaluates all", "Random", "Error"], answer: "Stops if known" }
+                ]
+            },
+            string: {
+                easy: [
+                    { q: "String stores:", options: ["Text", "Numbers", "Boolean", "Character"], answer: "Text" },
+                    { q: "Create string: String s = ", options: ["\"Hello\"", "'Hello'", "Hello", "[Hello]"], answer: "\"Hello\"" },
+                    { q: "s.length() gives:", options: ["String length", "String value", "String type", "Error"], answer: "String length" },
+                    { q: "String is:", options: ["Immutable", "Mutable", "Primitive", "Numeric"], answer: "Immutable" },
+                    { q: "Concatenate: \"Hi\" + \" Java\"", options: ["Hi Java", "HiJava", "Error", "Hi"], answer: "Hi Java" }
+                ],
+                medium: [
+                    { q: "s.charAt(0) returns:", options: ["First character", "Last character", "Length", "Error"], answer: "First character" },
+                    { q: "s.toUpperCase() does:", options: ["Converts to uppercase", "Converts to lowercase", "Reverses", "Nothing"], answer: "Converts to uppercase" },
+                    { q: "s.equals(\"test\") checks:", options: ["Content equality", "Reference", "Length", "Type"], answer: "Content equality" },
+                    { q: "== for strings compares:", options: ["Reference", "Content", "Both", "Length"], answer: "Reference" },
+                    { q: "s.substring(0,3) extracts:", options: ["First 3 chars", "Last 3 chars", "All chars", "Error"], answer: "First 3 chars" }
+                ],
+                hard: [
+                    { q: "String pool is in:", options: ["Heap", "Stack", "Method area", "Register"], answer: "Heap" },
+                    { q: "String vs StringBuilder:", options: ["StringBuilder mutable", "Both immutable", "Both mutable", "Same"], answer: "StringBuilder mutable" },
+                    { q: "String s = new String(\"Hi\") creates:", options: ["2 objects", "1 object", "0 objects", "3 objects"], answer: "2 objects" },
+                    { q: "s.intern() does:", options: ["Adds to pool", "Removes from pool", "Copies string", "Nothing"], answer: "Adds to pool" },
+                    { q: "Best for multiple concatenations:", options: ["StringBuilder", "String", "Both same", "StringBuffer"], answer: "StringBuilder" }
+                ]
+            },
+            math: {
+                easy: [
+                    { q: "Math.max(5, 10) returns:", options: ["10", "5", "15", "Error"], answer: "10" },
+                    { q: "Math.min(5, 10) returns:", options: ["5", "10", "15", "Error"], answer: "5" },
+                    { q: "Math.abs(-5) returns:", options: ["5", "-5", "0", "Error"], answer: "5" },
+                    { q: "Math.sqrt(16) returns:", options: ["4", "8", "16", "2"], answer: "4" },
+                    { q: "Math.pow(2, 3) returns:", options: ["8", "6", "9", "5"], answer: "8" }
+                ],
+                medium: [
+                    { q: "Math.ceil(4.3) returns:", options: ["5.0", "4.0", "4.3", "Error"], answer: "5.0" },
+                    { q: "Math.floor(4.7) returns:", options: ["4.0", "5.0", "4.7", "Error"], answer: "4.0" },
+                    { q: "Math.round(4.5) returns:", options: ["5", "4", "4.5", "Error"], answer: "5" },
+                    { q: "Math.random() returns:", options: ["0.0 to 1.0", "0 to 100", "1 to 10", "Any number"], answer: "0.0 to 1.0" },
+                    { q: "Math.PI is approximately:", options: ["3.14", "2.71", "1.41", "1.73"], answer: "3.14" }
+                ],
+                hard: [
+                    { q: "Math.round(-4.5) returns:", options: ["-4", "-5", "4", "5"], answer: "-4" },
+                    { q: "Math.sin(), cos() work with:", options: ["Radians", "Degrees", "Both", "Neither"], answer: "Radians" },
+                    { q: "Math.log() is:", options: ["Natural log", "Base 10", "Base 2", "Custom base"], answer: "Natural log" },
+                    { q: "Math.exp(1) is approximately:", options: ["2.71", "3.14", "1.41", "1.73"], answer: "2.71" },
+                    { q: "To get random int 1-10:", options: ["(int)(Math.random()*10)+1", "Math.random(10)", "random(1,10)", "Math.rand()"], answer: "(int)(Math.random()*10)+1" }
+                ]
+            },
+            boolean: {
+                easy: [
+                    { q: "boolean stores:", options: ["true/false", "0/1", "yes/no", "Text"], answer: "true/false" },
+                    { q: "5 > 3 returns:", options: ["true", "false", "1", "0"], answer: "true" },
+                    { q: "10 == 10 returns:", options: ["true", "false", "10", "Error"], answer: "true" },
+                    { q: "!true returns:", options: ["false", "true", "Error", "0"], answer: "false" },
+                    { q: "true && true returns:", options: ["true", "false", "Error", "1"], answer: "true" }
+                ],
+                medium: [
+                    { q: "true && false returns:", options: ["false", "true", "Error", "0"], answer: "false" },
+                    { q: "true || false returns:", options: ["true", "false", "Error", "1"], answer: "true" },
+                    { q: "false || false returns:", options: ["false", "true", "Error", "0"], answer: "false" },
+                    { q: "(5>3) && (10<20) returns:", options: ["true", "false", "Error", "5"], answer: "true" },
+                    { q: "!false returns:", options: ["true", "false", "Error", "1"], answer: "true" }
+                ],
+                hard: [
+                    { q: "false && (1/0>0) throws:", options: ["No error", "Error", "true", "false"], answer: "No error" },
+                    { q: "true || (1/0>0) throws:", options: ["No error", "Error", "true", "false"], answer: "No error" },
+                    { q: "Short-circuit evaluation:", options: ["Stops when result known", "Always evaluates all", "Random", "Error"], answer: "Stops when result known" },
+                    { q: "XOR operator in Java:", options: ["^", "^^", "xor", "Not available"], answer: "^" },
+                    { q: "true ^ true returns:", options: ["false", "true", "Error", "1"], answer: "false" }
+                ]
+            },
+            ifelse: {
+                easy: [
+                    { q: "if statement checks:", options: ["Condition", "Loop", "Variable", "Method"], answer: "Condition" },
+                    { q: "else executes when:", options: ["Condition false", "Condition true", "Always", "Never"], answer: "Condition false" },
+                    { q: "if(5>3) executes:", options: ["Always", "Never", "Sometimes", "Error"], answer: "Always" },
+                    { q: "Comparison operator:", options: ["==", "=", "===", ":"], answer: "==" },
+                    { q: "if block uses:", options: ["{}", "()", "[]", "<>"], answer: "{}" }
+                ],
+                medium: [
+                    { q: "else if is for:", options: ["Multiple conditions", "Loop", "Method", "Class"], answer: "Multiple conditions" },
+                    { q: "Nested if means:", options: ["if inside if", "Multiple if", "else if", "Error"], answer: "if inside if" },
+                    { q: "if without {} executes:", options: ["Next statement only", "All statements", "Nothing", "Error"], answer: "Next statement only" },
+                    { q: "Ternary operator: x>5 ? a : b", options: ["Short if-else", "Loop", "Method", "Error"], answer: "Short if-else" },
+                    { q: "Multiple else if:", options: ["Only one executes", "All execute", "None execute", "Error"], answer: "Only one executes" }
+                ],
+                hard: [
+                    { q: "if(x=5) in Java:", options: ["Compilation error", "Assigns value", "Compares", "Runtime error"], answer: "Compilation error" },
+                    { q: "Dangling else problem:", options: ["Ambiguous nesting", "Missing else", "Extra else", "No problem"], answer: "Ambiguous nesting" },
+                    { q: "if(null) compiles:", options: ["No", "Yes", "Sometimes", "Depends"], answer: "No" },
+                    { q: "Guard clauses:", options: ["Early returns", "Late returns", "No returns", "Multiple returns"], answer: "Early returns" },
+                    { q: "if condition must be:", options: ["boolean", "int", "String", "Any type"], answer: "boolean" }
+                ]
+            },
+            switch: {
+                easy: [
+                    { q: "switch checks:", options: ["Equality", "Range", "Loop", "Method"], answer: "Equality" },
+                    { q: "break in switch:", options: ["Exits switch", "Continues", "Returns", "Nothing"], answer: "Exits switch" },
+                    { q: "default case is:", options: ["Optional", "Mandatory", "Error", "First case"], answer: "Optional" },
+                    { q: "switch works with:", options: ["int, String, char", "Only int", "Only String", "float"], answer: "int, String, char" },
+                    { q: "case values must be:", options: ["Constant", "Variable", "Expression", "Method"], answer: "Constant" }
+                ],
+                medium: [
+                    { q: "Without break, switch:", options: ["Falls through", "Exits", "Error", "Stops"], answer: "Falls through" },
+                    { q: "switch(String) works from:", options: ["Java 7", "Java 5", "Java 8", "Java 1"], answer: "Java 7" },
+                    { q: "default can be:", options: ["Anywhere", "Only last", "Only first", "Not allowed"], answer: "Anywhere" },
+                    { q: "Multiple case labels:", options: ["Allowed", "Not allowed", "Error", "Only 2"], answer: "Allowed" },
+                    { q: "switch vs if-else:", options: ["switch for equality only", "Same functionality", "switch faster always", "if-else faster"], answer: "switch for equality only" }
+                ],
+                hard: [
+                    { q: "switch expression (Java 12+):", options: ["Returns value", "Void only", "Not valid", "Error"], answer: "Returns value" },
+                    { q: "Arrow syntax in switch:", options: ["-> (Java 12+)", "=>", ":", "Not available"], answer: "-> (Java 12+)" },
+                    { q: "yield keyword:", options: ["Returns from switch", "Pauses thread", "Exits program", "Not valid"], answer: "Returns from switch" },
+                    { q: "switch on enum:", options: ["Allowed", "Not allowed", "Error", "Java 8+"], answer: "Allowed" },
+                    { q: "Null in switch:", options: ["NullPointerException", "Allowed", "Default case", "Error"], answer: "NullPointerException" }
+                ]
+            },
+            whileloop: {
+                easy: [
+                    { q: "while loop checks condition:", options: ["Before execution", "After execution", "Never", "Always"], answer: "Before execution" },
+                    { q: "do-while loop checks condition:", options: ["After execution", "Before execution", "Never", "Always"], answer: "After execution" },
+                    { q: "do-while runs minimum:", options: ["1 time", "0 times", "2 times", "Infinite"], answer: "1 time" },
+                    { q: "while(true) creates:", options: ["Infinite loop", "Error", "Single iteration", "No loop"], answer: "Infinite loop" },
+                    { q: "break exits:", options: ["Loop", "Method", "Class", "Program"], answer: "Loop" }
+                ],
+                medium: [
+                    { q: "continue in loop:", options: ["Skips iteration", "Exits loop", "Restarts", "Nothing"], answer: "Skips iteration" },
+                    { q: "while(false) executes:", options: ["Never", "Once", "Infinite", "Error"], answer: "Never" },
+                    { q: "do-while(false) executes:", options: ["Once", "Never", "Infinite", "Error"], answer: "Once" },
+                    { q: "Nested while loop:", options: ["Loop inside loop", "Two loops", "No nesting", "Error"], answer: "Loop inside loop" },
+                    { q: "while vs do-while:", options: ["Condition timing", "Same", "Speed", "Syntax only"], answer: "Condition timing" }
+                ],
+                hard: [
+                    { q: "Label in Java:", options: ["Names outer loop", "Variable name", "Method name", "Not valid"], answer: "Names outer loop" },
+                    { q: "break with label:", options: ["Breaks outer loop", "Error", "Same as break", "Not allowed"], answer: "Breaks outer loop" },
+                    { q: "continue with label:", options: ["Continues outer loop", "Error", "Same as continue", "Not allowed"], answer: "Continues outer loop" },
+                    { q: "Infinite loop exit:", options: ["break or return", "Only break", "Only return", "Cannot exit"], answer: "break or return" },
+                    { q: "while(condition); is:", options: ["Empty loop body", "Error", "Single statement", "Not valid"], answer: "Empty loop body" }
+                ]
+            },
+            forloop: {
+                easy: [
+                    { q: "for loop has ___ parts:", options: ["3", "2", "4", "1"], answer: "3" },
+                    { q: "for(int i=0; i<5; i++) runs:", options: ["5 times", "4 times", "6 times", "Infinite"], answer: "5 times" },
+                    { q: "i++ in for loop:", options: ["Increments i", "Decrements i", "Nothing", "Error"], answer: "Increments i" },
+                    { q: "Enhanced for loop:", options: ["for(type var : array)", "for(var in array)", "foreach", "for var array"], answer: "for(type var : array)" },
+                    { q: "for(;;) creates:", options: ["Infinite loop", "Error", "No loop", "One iteration"], answer: "Infinite loop" }
+                ],
+                medium: [
+                    { q: "for(int i=10; i>0; i--) runs:", options: ["10 times", "9 times", "11 times", "Infinite"], answer: "10 times" },
+                    { q: "for(int i=0, j=0; i<5; i++, j+=2):", options: ["Valid", "Error", "Only i works", "Infinite"], answer: "Valid" },
+                    { q: "Enhanced for can modify:", options: ["Cannot modify array", "Can modify", "Can delete", "Can add"], answer: "Cannot modify array" },
+                    { q: "break in for loop:", options: ["Exits loop", "Skips iteration", "Continues", "Error"], answer: "Exits loop" },
+                    { q: "Nested for loop:", options: ["Loop inside loop", "Two loops", "Error", "Not allowed"], answer: "Loop inside loop" }
+                ],
+                hard: [
+                    { q: "for(int i=0; i<5; ) is:", options: ["Valid (manual increment)", "Error", "Infinite", "Never runs"], answer: "Valid (manual increment)" },
+                    { q: "for(; ; ) same as:", options: ["while(true)", "while(false)", "Error", "do-while"], answer: "while(true)" },
+                    { q: "Enhanced for limitation:", options: ["Cannot modify/remove", "Can do everything", "Slower", "Java 8+"], answer: "Cannot modify/remove" },
+                    { q: "for loop vs while:", options: ["For has counter", "Same thing", "While faster", "For faster"], answer: "For has counter" },
+                    { q: "Comma in for loop:", options: ["Multiple init/update", "Error", "Comment", "Separator"], answer: "Multiple init/update" }
+                ]
+            },
+            arrays: {
+                easy: [
+                    { q: "Array index starts from:", options: ["0", "1", "-1", "Depends"], answer: "0" },
+                    { q: "Declare array: int[]", options: ["arr", "array arr", "(arr)", "[arr]"], answer: "arr" },
+                    { q: "arr.length gives:", options: ["Size", "Last element", "First element", "Error"], answer: "Size" },
+                    { q: "Create array: new int[5] has:", options: ["5 elements", "4 elements", "6 elements", "Error"], answer: "5 elements" },
+                    { q: "Default int array value:", options: ["0", "null", "Garbage", "-1"], answer: "0" }
+                ],
+                medium: [
+                    { q: "2D array: int[][]", options: ["arr", "arr[]", "[]arr", "arr()"], answer: "arr" },
+                    { q: "Array in Java is:", options: ["Object", "Primitive", "Struct", "Pointer"], answer: "Object" },
+                    { q: "arr[arr.length] gives:", options: ["ArrayIndexOutOfBounds", "Last element", "First element", "0"], answer: "ArrayIndexOutOfBounds" },
+                    { q: "Arrays.sort() does:", options: ["Sorts array", "Searches", "Reverses", "Copies"], answer: "Sorts array" },
+                    { q: "Copy array:", options: ["clone() or arraycopy()", "=", "copy()", "duplicate()"], answer: "clone() or arraycopy()" }
+                ],
+                hard: [
+                    { q: "Jagged array:", options: ["Unequal rows", "Equal rows", "1D array", "Not allowed"], answer: "Unequal rows" },
+                    { q: "Anonymous array:", options: ["new int[]{1,2,3}", "int[]{1,2,3}", "[1,2,3]", "Not possible"], answer: "new int[]{1,2,3}" },
+                    { q: "Arrays class in:", options: ["java.util", "java.lang", "java.io", "java.array"], answer: "java.util" },
+                    { q: "Array covariance:", options: ["Object[] = String[]", "Not allowed", "Error", "Only primitives"], answer: "Object[] = String[]" },
+                    { q: "Arrays.asList() creates:", options: ["Fixed-size list", "ArrayList", "LinkedList", "Array"], answer: "Fixed-size list" }
+                ]
+            },
+            methods: {
+                easy: [
+                    { q: "Method that returns nothing:", options: ["void", "null", "empty", "none"], answer: "void" },
+                    { q: "Method needs:", options: ["Return type", "Only name", "Only body", "Nothing"], answer: "Return type" },
+                    { q: "Return value using:", options: ["return", "give", "send", "exit"], answer: "return" },
+                    { q: "Call method using:", options: ["()", "{}", "[]", "<>"], answer: "()" },
+                    { q: "main() is:", options: ["static", "non-static", "final", "abstract"], answer: "static" }
+                ],
+                medium: [
+                    { q: "Method signature includes:", options: ["Name and parameters", "Only name", "Return type", "Body"], answer: "Name and parameters" },
+                    { q: "void method can have:", options: ["return;", "return value;", "No return", "return 0;"], answer: "return;" },
+                    { q: "this keyword refers to:", options: ["Current object", "Class", "Method", "Variable"], answer: "Current object" },
+                    { q: "Static method accesses:", options: ["Static members", "All members", "Instance only", "Nothing"], answer: "Static members" },
+                    { q: "Varargs: int...", options: ["args", "args[]", "(args)", "[args]"], answer: "args" }
+                ],
+                hard: [
+                    { q: "Varargs must be:", options: ["Last parameter", "First parameter", "Any position", "Not allowed"], answer: "Last parameter" },
+                    { q: "Method with same name:", options: ["Overloading", "Overriding", "Error", "Not allowed"], answer: "Overloading" },
+                    { q: "Recursive method:", options: ["Calls itself", "Calls other", "Never calls", "Error"], answer: "Calls itself" },
+                    { q: "final method:", options: ["Cannot override", "Cannot call", "Cannot create", "No difference"], answer: "Cannot override" },
+                    { q: "Pass by value means:", options: ["Copy passed", "Reference passed", "Both", "Neither"], answer: "Copy passed" }
+                ]
+            },
+            parameters: {
+                easy: [
+                    { q: "Parameters are:", options: ["Method inputs", "Method outputs", "Variables", "Classes"], answer: "Method inputs" },
+                    { q: "void method(int x) - x is:", options: ["Parameter", "Return value", "Local variable", "Class"], answer: "Parameter" },
+                    { q: "Arguments are:", options: ["Actual values passed", "Method name", "Return type", "Class"], answer: "Actual values passed" },
+                    { q: "method(5, 10) - 5,10 are:", options: ["Arguments", "Parameters", "Variables", "Objects"], answer: "Arguments" },
+                    { q: "Multiple parameters separated by:", options: [",", ";", ":", "."], answer: "," }
+                ],
+                medium: [
+                    { q: "Java passes parameters by:", options: ["Value", "Reference", "Both", "Neither"], answer: "Value" },
+                    { q: "Changing parameter inside method:", options: ["Doesn't affect original", "Changes original", "Error", "Depends"], answer: "Doesn't affect original" },
+                    { q: "Varargs allows:", options: ["Variable arguments", "Fixed arguments", "No arguments", "One argument"], answer: "Variable arguments" },
+                    { q: "void method(int... nums) can receive:", options: ["0 or more ints", "Only 1 int", "Exactly 2 ints", "Error"], answer: "0 or more ints" },
+                    { q: "Parameter vs Argument:", options: ["Definition vs Value", "Same thing", "Value vs Definition", "No difference"], answer: "Definition vs Value" }
+                ],
+                hard: [
+                    { q: "Passing object to method:", options: ["Reference value passed", "Object copied", "Not allowed", "Error"], answer: "Reference value passed" },
+                    { q: "Modifying object in method:", options: ["Affects original", "Doesn't affect", "Error", "Creates copy"], answer: "Affects original" },
+                    { q: "Varargs internally:", options: ["Array", "ArrayList", "List", "Set"], answer: "Array" },
+                    { q: "Can have multiple varargs?", options: ["No", "Yes", "2 maximum", "Unlimited"], answer: "No" },
+                    { q: "Parameter shadowing:", options: ["Parameter hides field", "Field hides parameter", "Error", "Not possible"], answer: "Parameter hides field" }
+                ]
+            },
+            overloading: {
+                easy: [
+                    { q: "Method overloading:", options: ["Same name, diff params", "Diff name", "Same everything", "Not allowed"], answer: "Same name, diff params" },
+                    { q: "Overloading changes:", options: ["Parameters", "Return type", "Name", "Nothing"], answer: "Parameters" },
+                    { q: "add(int, int) and add(int, int, int):", options: ["Overloaded", "Same method", "Error", "Override"], answer: "Overloaded" },
+                    { q: "Overloading is:", options: ["Compile-time polymorphism", "Runtime polymorphism", "Not polymorphism", "Error"], answer: "Compile-time polymorphism" },
+                    { q: "Can overload main()?", options: ["Yes", "No", "Error", "Java 8+"], answer: "Yes" }
+                ],
+                medium: [
+                    { q: "add(int) and add(double):", options: ["Overloaded", "Same", "Error", "Override"], answer: "Overloaded" },
+                    { q: "Changing only return type:", options: ["Not overloading", "Overloading", "Error", "Allowed"], answer: "Not overloading" },
+                    { q: "add(int, double) vs add(double, int):", options: ["Overloaded", "Same", "Error", "Not allowed"], answer: "Overloaded" },
+                    { q: "Type promotion in overloading:", options: ["int to long allowed", "Not allowed", "Error", "Manual only"], answer: "int to long allowed" },
+                    { q: "Ambiguous overloading:", options: ["Compilation error", "Runtime error", "No error", "Warning"], answer: "Compilation error" }
+                ],
+                hard: [
+                    { q: "add(int...) vs add(int, int):", options: ["Both valid, ambiguous call", "Error", "Same method", "Not allowed"], answer: "Both valid, ambiguous call" },
+                    { q: "Overloading vs Overriding:", options: ["Compile vs Runtime", "Same thing", "Both compile-time", "Both runtime"], answer: "Compile vs Runtime" },
+                    { q: "Static method overloading:", options: ["Allowed", "Not allowed", "Error", "Java 8+"], answer: "Allowed" },
+                    { q: "Constructor overloading:", options: ["Allowed", "Not allowed", "Error", "One only"], answer: "Allowed" },
+                    { q: "Private method overloading:", options: ["Allowed in same class", "Not allowed", "Error", "Public only"], answer: "Allowed in same class" }
+                ]
+            },
+            classes: {
+                easy: [
+                    { q: "Class is a:", options: ["Blueprint", "Object", "Method", "Variable"], answer: "Blueprint" },
+                    { q: "Class keyword:", options: ["class", "Class", "new", "create"], answer: "class" },
+                    { q: "Class name should be:", options: ["PascalCase", "camelCase", "lowercase", "UPPERCASE"], answer: "PascalCase" },
+                    { q: "File name must match:", options: ["Public class name", "Any class", "Package", "Method"], answer: "Public class name" },
+                    { q: "Class can have:", options: ["Fields and methods", "Only fields", "Only methods", "Nothing"], answer: "Fields and methods" }
+                ],
+                medium: [
+                    { q: "One file can have:", options: ["One public class", "Many public classes", "No public class", "Unlimited"], answer: "One public class" },
+                    { q: "Inner class:", options: ["Class inside class", "Same as regular", "Not allowed", "Error"], answer: "Class inside class" },
+                    { q: "Abstract class can have:", options: ["Abstract & concrete methods", "Only abstract", "Only concrete", "No methods"], answer: "Abstract & concrete methods" },
+                    { q: "Can instantiate abstract class?", options: ["No", "Yes", "Sometimes", "Java 8+"], answer: "No" },
+                    { q: "final class:", options: ["Cannot extend", "Cannot create", "Cannot modify", "No difference"], answer: "Cannot extend" }
+                ],
+                hard: [
+                    { q: "Static nested class:", options: ["Doesn't need outer object", "Needs outer object", "Same as inner", "Not allowed"], answer: "Doesn't need outer object" },
+                    { q: "Anonymous class:", options: ["No name", "Has name", "Error", "Not allowed"], answer: "No name" },
+                    { q: "Local class:", options: ["Defined in method", "Defined in class", "Not allowed", "Error"], answer: "Defined in method" },
+                    { q: "Class can implement:", options: ["Multiple interfaces", "One interface", "No interface", "Error"], answer: "Multiple interfaces" },
+                    { q: "Singleton pattern:", options: ["One instance only", "Many instances", "No instance", "Abstract class"], answer: "One instance only" }
+                ]
+            },
+            objects: {
+                easy: [
+                    { q: "Object is:", options: ["Instance of class", "Class", "Method", "Variable"], answer: "Instance of class" },
+                    { q: "Create object using:", options: ["new", "create", "make", "object"], answer: "new" },
+                    { q: "Dog d = new Dog(); d is:", options: ["Reference variable", "Object", "Class", "Method"], answer: "Reference variable" },
+                    { q: "new Dog() creates:", options: ["Object", "Class", "Method", "Variable"], answer: "Object" },
+                    { q: "Access object member:", options: [".", "->", "::", ","], answer: "." }
+                ],
+                medium: [
+                    { q: "null reference:", options: ["No object", "Empty object", "Zero", "Error"], answer: "No object" },
+                    { q: "Calling method on null:", options: ["NullPointerException", "No error", "Returns null", "Compilation error"], answer: "NullPointerException" },
+                    { q: "Object without reference:", options: ["Garbage collected", "Stays in memory", "Error", "Deleted immediately"], answer: "Garbage collected" },
+                    { q: "this keyword:", options: ["Current object reference", "Class reference", "Method reference", "Variable"], answer: "Current object reference" },
+                    { q: "Multiple references to object:", options: ["Allowed", "Not allowed", "Error", "One only"], answer: "Allowed" }
+                ],
+                hard: [
+                    { q: "Object class is:", options: ["Root of hierarchy", "Not special", "Abstract", "Interface"], answer: "Root of hierarchy" },
+                    { q: "Every class extends:", options: ["Object implicitly", "Nothing", "Class explicitly", "Error"], answer: "Object implicitly" },
+                    { q: "Object.equals() checks:", options: ["Reference by default", "Content", "Type", "All"], answer: "Reference by default" },
+                    { q: "Object.hashCode():", options: ["Returns hash value", "Compares objects", "Copies object", "Deletes object"], answer: "Returns hash value" },
+                    { q: "Object cloning:", options: ["Copies object", "References same", "Not allowed", "Error"], answer: "Copies object" }
+                ]
+            },
+            constructor: {
+                easy: [
+                    { q: "Constructor name must be:", options: ["Same as class", "Different from class", "main", "Any name"], answer: "Same as class" },
+                    { q: "Constructor has:", options: ["No return type", "void", "int", "String"], answer: "No return type" },
+                    { q: "Constructor called when:", options: ["Object created", "Method called", "Class loaded", "Program ends"], answer: "Object created" },
+                    { q: "Default constructor:", options: ["No parameters", "With parameters", "Not allowed", "Error"], answer: "No parameters" },
+                    { q: "If no constructor written:", options: ["Java creates default", "Error", "Cannot create object", "Manual required"], answer: "Java creates default" }
+                ],
+                medium: [
+                    { q: "Constructor overloading:", options: ["Allowed", "Not allowed", "Error", "One only"], answer: "Allowed" },
+                    { q: "this() in constructor:", options: ["Calls another constructor", "Creates object", "Returns this", "Error"], answer: "Calls another constructor" },
+                    { q: "this() must be:", options: ["First statement", "Last statement", "Anywhere", "Not allowed"], answer: "First statement" },
+                    { q: "Constructor can be:", options: ["private", "Only public", "Only protected", "Only default"], answer: "private" },
+                    { q: "Private constructor:", options: ["Prevents instantiation", "No effect", "Error", "Not allowed"], answer: "Prevents instantiation" }
+                ],
+                hard: [
+                    { q: "super() in constructor:", options: ["Calls parent constructor", "Calls this constructor", "Creates object", "Error"], answer: "Calls parent constructor" },
+                    { q: "super() is:", options: ["First statement implicitly", "Not required", "Last statement", "Error"], answer: "First statement implicitly" },
+                    { q: "Constructor chaining:", options: ["Constructor calls constructor", "Not allowed", "Error", "Same as recursion"], answer: "Constructor calls constructor" },
+                    { q: "Can constructor be final?", options: ["No", "Yes", "Sometimes", "Java 8+"], answer: "No" },
+                    { q: "Can constructor be abstract?", options: ["No", "Yes", "Sometimes", "Java 8+"], answer: "No" }
+                ]
+            },
+            modifiers: {
+                easy: [
+                    { q: "public means:", options: ["Accessible everywhere", "Same class only", "Same package", "Subclass"], answer: "Accessible everywhere" },
+                    { q: "private means:", options: ["Same class only", "Everywhere", "Same package", "Subclass"], answer: "Same class only" },
+                    { q: "static means:", options: ["Belongs to class", "Belongs to object", "Cannot change", "Hidden"], answer: "Belongs to class" },
+                    { q: "final variable:", options: ["Cannot change", "Can change", "Must be private", "Must be public"], answer: "Cannot change" },
+                    { q: "Access modifier for most restrictive:", options: ["private", "public", "protected", "default"], answer: "private" }
+                ],
+                medium: [
+                    { q: "protected accessible in:", options: ["Package & subclass", "Only package", "Only subclass", "Everywhere"], answer: "Package & subclass" },
+                    { q: "default (no modifier) accessible in:", options: ["Same package", "Everywhere", "Subclass only", "Same class"], answer: "Same package" },
+                    { q: "static method can access:", options: ["Static members", "All members", "Instance only", "Nothing"], answer: "Static members" },
+                    { q: "final method:", options: ["Cannot override", "Cannot overload", "Cannot call", "No difference"], answer: "Cannot override" },
+                    { q: "final class:", options: ["Cannot extend", "Cannot instantiate", "Cannot modify", "No difference"], answer: "Cannot extend" }
+                ],
+                hard: [
+                    { q: "abstract method must be in:", options: ["Abstract class", "Any class", "Final class", "Static class"], answer: "Abstract class" },
+                    { q: "synchronized modifier:", options: ["Thread-safe", "Faster", "Slower", "No effect"], answer: "Thread-safe" },
+                    { q: "volatile variable:", options: ["Thread-visible changes", "Cannot change", "Faster access", "No effect"], answer: "Thread-visible changes" },
+                    { q: "transient variable:", options: ["Not serialized", "Cannot change", "Thread-safe", "No effect"], answer: "Not serialized" },
+                    { q: "native method:", options: ["Implemented in other language", "Java only", "Abstract", "Not allowed"], answer: "Implemented in other language" }
+                ]
+            },
+            encapsulation: {
+                easy: [
+                    { q: "Encapsulation means:", options: ["Data hiding", "Data exposure", "Code reuse", "Inheritance"], answer: "Data hiding" },
+                    { q: "Private fields accessed via:", options: ["Getters/Setters", "Direct access", "Public fields", "Static"], answer: "Getters/Setters" },
+                    { q: "Getter method:", options: ["Returns field value", "Sets field value", "Creates object", "Deletes field"], answer: "Returns field value" },
+                    { q: "Setter method:", options: ["Sets field value", "Gets field value", "Creates object", "Deletes field"], answer: "Sets field value" },
+                    { q: "Encapsulation provides:", options: ["Data protection", "Code complexity", "Slower code", "No benefit"], answer: "Data protection" }
+                ],
+                medium: [
+                    { q: "Getter naming convention:", options: ["getFieldName", "fieldName", "get_field", "GetField"], answer: "getFieldName" },
+                    { q: "Setter naming convention:", options: ["setFieldName", "fieldName", "set_field", "SetField"], answer: "setFieldName" },
+                    { q: "Boolean getter:", options: ["isFieldName", "getFieldName", "fieldName", "getBool"], answer: "isFieldName" },
+                    { q: "Validation in setter:", options: ["Allowed and recommended", "Not allowed", "Error", "Not needed"], answer: "Allowed and recommended" },
+                    { q: "Read-only property:", options: ["Only getter", "Only setter", "Both", "Neither"], answer: "Only getter" }
+                ],
+                hard: [
+                    { q: "Returning mutable object:", options: ["Breaks encapsulation", "Safe", "Recommended", "No effect"], answer: "Breaks encapsulation" },
+                    { q: "Defensive copying:", options: ["Return copy of object", "Return same object", "Not needed", "Error"], answer: "Return copy of object" },
+                    { q: "Immutable class:", options: ["No setters", "No getters", "No fields", "No methods"], answer: "No setters" },
+                    { q: "Benefits of encapsulation:", options: ["All of the above", "Data hiding", "Flexibility", "Validation"], answer: "All of the above" },
+                    { q: "Package-private fields:", options: ["Breaks encapsulation", "Good practice", "Required", "Error"], answer: "Breaks encapsulation" }
+                ]
+            },
+            inheritance: {
+                easy: [
+                    { q: "Inheritance keyword:", options: ["extends", "inherit", "implements", "super"], answer: "extends" },
+                    { q: "Child class is called:", options: ["Subclass", "Superclass", "Base class", "Parent"], answer: "Subclass" },
+                    { q: "Parent class is called:", options: ["Superclass", "Subclass", "Child class", "Derived"], answer: "Superclass" },
+                    { q: "Inheritance represents:", options: ["Is-a relationship", "Has-a relationship", "Uses-a", "None"], answer: "Is-a relationship" },
+                    { q: "Child inherits:", options: ["Public/Protected members", "Only public", "Only private", "Nothing"], answer: "Public/Protected members" }
+                ],
+                medium: [
+                    { q: "Java supports:", options: ["Single inheritance", "Multiple inheritance", "Both", "No inheritance"], answer: "Single inheritance" },
+                    { q: "Multiple inheritance through:", options: ["Interfaces", "Classes", "Not possible", "Both"], answer: "Interfaces" },
+                    { q: "super keyword accesses:", options: ["Parent members", "Child members", "Static members", "Nothing"], answer: "Parent members" },
+                    { q: "Method overriding needs:", options: ["Inheritance", "Same class", "Interface", "Nothing"], answer: "Inheritance" },
+                    { q: "Private members:", options: ["Not inherited", "Inherited", "Sometimes", "Java 8+"], answer: "Not inherited" }
+                ],
+                hard: [
+                    { q: "Constructor inheritance:", options: ["Not inherited", "Inherited", "Sometimes", "Depends"], answer: "Not inherited" },
+                    { q: "Diamond problem in Java:", options: ["Solved by interfaces", "Not solved", "Not applicable", "Error"], answer: "Solved by interfaces" },
+                    { q: "Covariant return type:", options: ["Subclass return in override", "Same return type", "Not allowed", "Error"], answer: "Subclass return in override" },
+                    { q: "final class can be:", options: ["Cannot extend", "Can extend", "Must extend", "Abstract"], answer: "Cannot extend" },
+                    { q: "IS-A test:", options: ["instanceof operator", "equals()", "==", "getClass()"], answer: "instanceof operator" }
+                ]
+            },
+            polymorphism: {
+                easy: [
+                    { q: "Polymorphism means:", options: ["Many forms", "One form", "No form", "Data hiding"], answer: "Many forms" },
+                    { q: "Method overloading is:", options: ["Compile-time polymorphism", "Runtime polymorphism", "Not polymorphism", "Error"], answer: "Compile-time polymorphism" },
+                    { q: "Method overriding is:", options: ["Runtime polymorphism", "Compile-time polymorphism", "Not polymorphism", "Error"], answer: "Runtime polymorphism" },
+                    { q: "Overriding requires:", options: ["Inheritance", "Same class", "Interface", "Nothing"], answer: "Inheritance" },
+                    { q: "Parent p = new Child(); is:", options: ["Upcasting", "Downcasting", "Error", "Not allowed"], answer: "Upcasting" }
+                ],
+                medium: [
+                    { q: "@Override annotation:", options: ["Optional but recommended", "Mandatory", "Error", "Not used"], answer: "Optional but recommended" },
+                    { q: "Override method can be:", options: ["More accessible", "Less accessible", "Same access", "Any access"], answer: "More accessible" },
+                    { q: "Override method cannot be:", options: ["Less accessible", "More accessible", "Same access", "Any access"], answer: "Less accessible" },
+                    { q: "final method can be:", options: ["Cannot override", "Must override", "Can override", "Abstract"], answer: "Cannot override" },
+                    { q: "static method overriding:", options: ["Not overriding, hiding", "Overriding", "Error", "Not allowed"], answer: "Not overriding, hiding" }
+                ],
+                hard: [
+                    { q: "Dynamic method dispatch:", options: ["Runtime binding", "Compile-time binding", "Not allowed", "Error"], answer: "Runtime binding" },
+                    { q: "Covariant return type allows:", options: ["Subclass return type", "Any return type", "Only same type", "No return"], answer: "Subclass return type" },
+                    { q: "Parent p = new Child(); p.method() calls:", options: ["Child's method", "Parent's method", "Both", "Error"], answer: "Child's method" },
+                    { q: "Downcasting requires:", options: ["Explicit cast", "Implicit cast", "Not allowed", "Error"], answer: "Explicit cast" },
+                    { q: "ClassCastException occurs in:", options: ["Invalid downcasting", "Upcasting", "Method call", "Object creation"], answer: "Invalid downcasting" }
+                ]
+            },
+            super: {
+                easy: [
+                    { q: "super keyword refers to:", options: ["Parent class", "Current class", "Child class", "Object"], answer: "Parent class" },
+                    { q: "super() calls:", options: ["Parent constructor", "Current constructor", "Method", "Nothing"], answer: "Parent constructor" },
+                    { q: "super.method() calls:", options: ["Parent method", "Current method", "Child method", "Error"], answer: "Parent method" },
+                    { q: "super() must be:", options: ["First statement", "Last statement", "Anywhere", "Not required"], answer: "First statement" },
+                    { q: "super.field accesses:", options: ["Parent field", "Current field", "Child field", "Error"], answer: "Parent field" }
+                ],
+                medium: [
+                    { q: "super() is added:", options: ["Implicitly by compiler", "Must write manually", "Not added", "Error"], answer: "Implicitly by compiler" },
+                    { q: "Can use this() and super():", options: ["Not together", "Together", "Only this()", "Only super()"], answer: "Not together" },
+                    { q: "super in static method:", options: ["Not allowed", "Allowed", "Error", "Required"], answer: "Not allowed" },
+                    { q: "Calling super.super:", options: ["Not allowed", "Allowed", "Required", "Java 8+"], answer: "Not allowed" },
+                    { q: "super with no parent:", options: ["Calls Object", "Error", "Not allowed", "Null"], answer: "Calls Object" }
+                ],
+                hard: [
+                    { q: "super() with parameterized parent:", options: ["Must match parameters", "No parameters needed", "Error", "Not allowed"], answer: "Must match parameters" },
+                    { q: "Accessing hidden field:", options: ["super.field", "this.field", "field", "parent.field"], answer: "super.field" },
+                    { q: "super in anonymous class:", options: ["Refers to supertype", "Not allowed", "Error", "Refers to Object"], answer: "Refers to supertype" },
+                    { q: "super() and exception:", options: ["Can throw checked exception", "Cannot throw", "Must catch", "Error"], answer: "Can throw checked exception" },
+                    { q: "super vs this:", options: ["Parent vs Current", "Same thing", "Current vs Parent", "Error"], answer: "Parent vs Current" }
+                ]
+            }
+        };
+
+        function generateQuestion() {
+            const topicQuestions = questions[currentTopic][currentDifficulty];
+            const randomQ = topicQuestions[Math.floor(Math.random() * topicQuestions.length)];
+            correctAnswer = randomQ.answer;
+            document.getElementById('question').innerHTML = randomQ.q;
+            displayOptions(randomQ.options, correctAnswer);
+        }
+
+        function displayOptions(options, correctAns) {
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                
+                if (option === correctAns) {
+                    btn.classList.add('correct-option');
+                    btn.onclick = function() { checkAnswer(this, option); };
+                } else {
+                    btn.onmousemove = function(e) {
+                        if (answered) return;
+                        runAwayFromMouse(btn, e);
+                    };
+                    btn.onclick = function() { checkAnswer(this, option); };
+                }
+                
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function runAwayFromMouse(button, event) {
+            const rect = button.getBoundingClientRect();
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+            const distX = btnCenterX - mouseX;
+            const distY = btnCenterY - mouseY;
+            const distance = Math.sqrt(distX * distX + distY * distY);
+            
+            if (distance < 150) {
+                const angle = Math.atan2(distY, distX);
+                const moveDistance = 80;
+                const newX = Math.cos(angle) * moveDistance;
+                const newY = Math.sin(angle) * moveDistance;
+                button.style.transform = `translate(${newX}px, ${newY}px)`;
+                setTimeout(() => {
+                    if (!answered) button.style.transform = 'translate(0, 0)';
+                }, 500);
+            }
+        }
+
+        function checkAnswer(button, selectedAnswer) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timerInterval);
+            playClickSound();
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.onmousemove = null;
+                btn.style.pointerEvents = 'none';
+                btn.style.transform = '';
+            });
+            
+            if (selectedAnswer === correctAnswer) {
+                button.classList.add('correct');
+                const messages = ['🎉 Correct!', '⭐ Excellent!', '🌟 Perfect!', '🏆 Great!', '💯 Outstanding!'];
+                document.getElementById('feedback').textContent = messages[Math.floor(Math.random() * messages.length)];
+                document.getElementById('feedback').className = 'feedback correct';
+                
+                let points = currentDifficulty === 'easy' ? 10 : currentDifficulty === 'medium' ? 20 : 30;
+                if (timeLeft > 40) points += 10;
+                score += points;
+                correctCount++;
+                streak++;
+                
+                document.getElementById('score').textContent = score;
+                document.getElementById('correct').textContent = correctCount;
+                document.getElementById('streak').textContent = streak;
+                createEmojiRain(['🌟', '⭐', '✨', '🎊', '🎉', '💫', '🏆', '☕']);
+                playCorrectSound();
+            } else {
+                button.classList.add('wrong');
+                const messages = ['❌ Try again!', '😅 Not quite!', '💪 Keep learning!', '🤔 Review!'];
+                document.getElementById('feedback').textContent = messages[Math.floor(Math.random() * messages.length)];
+                document.getElementById('feedback').className = 'feedback wrong';
+                wrongCount++;
+                streak = 0;
+                document.getElementById('wrong').textContent = wrongCount;
+                document.getElementById('streak').textContent = streak;
+                
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn.textContent === correctAnswer) btn.classList.add('correct');
+                });
+                playWrongSound();
+            }
+            
+            document.getElementById('timer').classList.remove('warning');
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        function createEmojiRain(emojis) {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji-rain';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * window.innerWidth + 'px';
+                    emoji.style.top = '-50px';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => emoji.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        function nextQuestion() {
+            answered = false;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('nextBtn').classList.remove('show');
+            document.getElementById('timer').classList.remove('warning');
+            generateQuestion();
+            startTimer();
+        }
+
+        generateQuestion();
+        startTimer();
+    </script>
+</body>
+</html>
